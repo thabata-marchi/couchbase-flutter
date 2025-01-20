@@ -1,39 +1,20 @@
 import 'package:checklist/app/entities/shopping_item_entity.dart';
+import 'package:checklist/app/repositories/checklist_api_repository.dart';
+// import 'package:checklist/app/repositories/checklist_mock_repository.dart';
+import 'package:checklist/app/services/couchbase_service.dart';
 
-class ChecklistRepository {
-  final List<ShoppingItemEntity> _items = [];
-
-  Future<List<ShoppingItemEntity>> fetchAll() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    return List<ShoppingItemEntity>.from(_items);
-  }
-
-  Future<void> addItem(ShoppingItemEntity item) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _items.add(item.copyWith(id: _items.length + 1));
-  }
-
+abstract class ChecklistRepository {
+  Future<List<ShoppingItemEntity>> fetchAll();
+  Future<void> addItem(ShoppingItemEntity item);
   Future<ShoppingItemEntity> updateItem({
     required int id,
     String? title,
     bool? isCompleted,
-  }) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    final index = _items.indexWhere((item) => item.id == id);
-    if (index != -1) {
-      _items[index] = _items[index].copyWith(
-        title: title,
-        isCompleted: isCompleted,
-      );
+  });
+  Future<void> deleteItem(int id);
 
-      return _items[index];
-    } else {
-      throw Exception();
-    }
-  }
-
-  Future<void> deleteItem(int id) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _items.removeWhere((item) => item.id == id);
+  factory ChecklistRepository({required CouchbaseService couchbaseService}) {
+    return ChecklistApiRepository(couchbaseService: couchbaseService);
+    // return ChecklistMockRepository();
   }
 }

@@ -1,5 +1,6 @@
+import 'package:checklist/app/repositories/checklist_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repositories/checklist_repository.dart';
+
 import 'delete_checklist_state.dart';
 
 class DeleteChecklistCubit extends Cubit<DeleteChecklistState> {

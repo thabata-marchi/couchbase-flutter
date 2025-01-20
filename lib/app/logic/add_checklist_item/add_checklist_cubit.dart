@@ -1,6 +1,7 @@
+import 'package:checklist/app/repositories/checklist_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../entities/shopping_item_entity.dart';
-import '../../repositories/checklist_repository.dart';
 import 'add_checklist_state.dart';
 
 class AddChecklistCubit extends Cubit<AddChecklistState> {

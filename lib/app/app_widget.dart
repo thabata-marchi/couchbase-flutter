@@ -1,3 +1,5 @@
+import 'package:checklist/app/repositories/checklist_repository.dart';
+import 'package:checklist/app/services/couchbase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +10,6 @@ import 'logic/checklist/checklist_cubit.dart';
 import 'logic/delete_checklist_item/delete_checklist_cubit.dart';
 import 'logic/update_checklist_item/update_checklist_cubit.dart';
 import 'pages/checklist_page.dart';
-import 'repositories/checklist_repository.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,8 +20,11 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        Provider(create: (context) => CouchbaseService()),
         // Fornece o ChecklistRepository
-        Provider(create: (context) => ChecklistRepository()),
+        Provider(
+            create: (context) => ChecklistRepository(
+                couchbaseService: context.read<CouchbaseService>())),
 
         // Fornece os Cubits, que usam o mesmo repositório
         BlocProvider(
@@ -56,7 +60,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: ChecklistPage(),
+        home: const ChecklistPage(),
       ),
     );
   }
