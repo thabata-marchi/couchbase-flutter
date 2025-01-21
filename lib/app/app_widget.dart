@@ -28,10 +28,9 @@ class MyApp extends StatelessWidget {
 
         // Fornece os Cubits, que usam o mesmo repositório
         BlocProvider(
-          create: (context) => FetchChecklistCubit(
-            context.read<ChecklistRepository>(),
-          )..fetchItems(),
-        ),
+            create: (context) => FetchChecklistCubit(
+                  context.read<ChecklistRepository>(),
+                )),
         BlocProvider(
           create: (context) => AddChecklistCubit(
             context.read<ChecklistRepository>(),

@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:checklist/app/logic/checklist/checklist_cubit.dart';
-import 'package:checklist/app/services/couchbase_service.dart';
 import 'package:checklist/app/widget/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +39,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
       title: 'Confirmação',
       content: 'Deseja excluir o item "${item.title}"?',
       onConfirm: () async {
-        await context.read<DeleteChecklistCubit>().deleteItem(item.id!);
+        await context.read<DeleteChecklistCubit>().deleteItem(item.id ?? '');
         context.read<FetchChecklistCubit>().fetchItems();
       },
     );
@@ -83,27 +82,29 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
     context.read<FetchChecklistCubit>().fetchItems();
 
-    context.read<CouchbaseService>().init().then(
-      (value) async {
-        final data = await context.read<CouchbaseService>().fetch(
-              collenctionName: 'checklist',
-            );
-        print(data.toString());
-      },
-    );
+    // MOCK PARA TESTES
+    // context.read<CouchbaseService>().init().then(
+    //   (value) async {
+    //     final data = await context.read<CouchbaseService>().fetch(
+    //           collenctionName: 'checklist',
+    //         );
+    //     print(data.toString());
+    //   },
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<CouchbaseService>().add(
-            data: {'id': 1, 'name': 'item', 'checked': true},
-            collectionName: 'checklist',
-          );
-        },
-      ),
+      // MOCK PARA TESTES
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     context.read<CouchbaseService>().add(
+      //       data: {'id': 1, 'name': 'item', 'checked': true},
+      //       collectionName: 'checklist',
+      //     );
+      //   },
+      // ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

@@ -28,10 +28,17 @@ class CouchbaseService {
     await database?.createCollection(collenctionName);
 
     final query = await database?.createQuery(
-        'SELECT * FROM $collenctionName ${filter != null ? 'WHERE $filter' : ''}');
+        'SELECT META().id, * FROM $collenctionName ${filter != null ? 'WHERE $filter' : ''}');
+
     final result = await query?.execute();
     final results = await result?.allResults();
-    final data = results?.map((e) => e.toPlainMap()).toList();
+
+    final data = results
+        ?.map((e) => {
+              'id': e.string('id'),
+              ...(e.toPlainMap()['checklist'] as Map<String, dynamic>),
+            })
+        .toList();
 
     return data ?? [];
   }

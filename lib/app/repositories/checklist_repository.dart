@@ -7,14 +7,14 @@ abstract class ChecklistRepository {
   Future<List<ShoppingItemEntity>> fetchAll();
   Future<void> addItem(ShoppingItemEntity item);
   Future<ShoppingItemEntity> updateItem({
-    required int id,
+    required String id,
     String? title,
     bool? isCompleted,
   });
-  Future<void> deleteItem(int id);
+  Future<void> deleteItem(String id);
 
   factory ChecklistRepository({required CouchbaseService couchbaseService}) {
     return ChecklistApiRepository(couchbaseService: couchbaseService);
-    // return ChecklistMockRepository();
+    // return ChecklistMockRepository(couchbaseService: couchbaseService);
   }
 }

@@ -8,6 +8,8 @@ class ChecklistMockRepository implements ChecklistRepository {
 
   final List<ShoppingItemEntity> _items = [];
 
+  final collectionName = 'checklist';
+
   @override
   Future<List<ShoppingItemEntity>> fetchAll() async {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -17,12 +19,12 @@ class ChecklistMockRepository implements ChecklistRepository {
   @override
   Future<void> addItem(ShoppingItemEntity item) async {
     await Future.delayed(const Duration(milliseconds: 100));
-    _items.add(item.copyWith(id: _items.length + 1));
+    _items.add(item.copyWith(id: '${_items.length + 1}'));
   }
 
   @override
   Future<ShoppingItemEntity> updateItem({
-    required int id,
+    required String id,
     String? title,
     bool? isCompleted,
   }) async {
@@ -41,7 +43,7 @@ class ChecklistMockRepository implements ChecklistRepository {
   }
 
   @override
-  Future<void> deleteItem(int id) async {
+  Future<void> deleteItem(String id) async {
     await Future.delayed(const Duration(milliseconds: 100));
     _items.removeWhere((item) => item.id == id);
   }
