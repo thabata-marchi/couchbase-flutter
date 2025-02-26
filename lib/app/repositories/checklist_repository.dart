@@ -6,7 +6,7 @@ import 'package:checklist/app/services/couchbase_service.dart';
 abstract class ChecklistRepository {
   Future<List<ShoppingItemEntity>> fetchAll();
   Future<void> addItem(ShoppingItemEntity item);
-  Future<ShoppingItemEntity> updateItem({
+  Future<void> updateItem({
     required String id,
     String? title,
     bool? isCompleted,

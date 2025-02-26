@@ -23,7 +23,7 @@ class ChecklistMockRepository implements ChecklistRepository {
   }
 
   @override
-  Future<ShoppingItemEntity> updateItem({
+  Future<void> updateItem({
     required String id,
     String? title,
     bool? isCompleted,
@@ -35,12 +35,30 @@ class ChecklistMockRepository implements ChecklistRepository {
         title: title,
         isCompleted: isCompleted,
       );
-
-      return _items[index];
     } else {
-      throw Exception();
+      throw Exception('Item not found');
     }
   }
+
+  // @override
+  // Future<ShoppingItemEntity> updateItem({
+  //   required String id,
+  //   String? title,
+  //   bool? isCompleted,
+  // }) async {
+  //   await Future.delayed(const Duration(milliseconds: 100));
+  //   final index = _items.indexWhere((item) => item.id != null && item.id == id);
+  //   if (index != -1) {
+  //     _items[index] = _items[index].copyWith(
+  //       title: title,
+  //       isCompleted: isCompleted,
+  //     );
+
+  //     return _items[index];
+  //   } else {
+  //     throw Exception();
+  //   }
+  // }
 
   @override
   Future<void> deleteItem(String id) async {

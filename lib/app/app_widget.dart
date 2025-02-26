@@ -23,14 +23,17 @@ class MyApp extends StatelessWidget {
         Provider(create: (context) => CouchbaseService()),
         // Fornece o ChecklistRepository
         Provider(
-            create: (context) => ChecklistRepository(
-                couchbaseService: context.read<CouchbaseService>())),
+          create: (context) => ChecklistRepository(
+            couchbaseService: context.read<CouchbaseService>(),
+          ),
+        ),
 
         // Fornece os Cubits, que usam o mesmo repositório
         BlocProvider(
-            create: (context) => FetchChecklistCubit(
-                  context.read<ChecklistRepository>(),
-                )),
+          create: (context) => FetchChecklistCubit(
+            context.read<ChecklistRepository>(),
+          ),
+        ),
         BlocProvider(
           create: (context) => AddChecklistCubit(
             context.read<ChecklistRepository>(),
