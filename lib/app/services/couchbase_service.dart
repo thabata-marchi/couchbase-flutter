@@ -1,4 +1,5 @@
 import 'package:cbl/cbl.dart';
+import 'package:checklist/app/utils/couchbase_contants.dart';
 
 class CouchbaseService {
   AsyncDatabase? database;
@@ -7,11 +8,67 @@ class CouchbaseService {
     database ??= await Database.openAsync('database');
   }
 
+  Future<void> startReplicator({
+    required String collectionName,
+    required Function() onSynced,
+  }) async {
+    final collection = await database?.createCollection(
+      collectionName,
+      CouchbaseContants.scope,
+    );
+    if (collection != null) {
+      final config = ReplicatorConfiguration(
+        target: UrlEndpoint(
+          Uri.parse(CouchbaseContants.publicConnectionUrl),
+        ),
+        authenticator: BasicAuthenticator(
+          username: CouchbaseContants.userName,
+          password: CouchbaseContants.password,
+        ),
+        // continuous -> Como ele vai fazer esta replicação, maneira contínua, de maneira única,
+        // se eu definir como false, ele faz apenas uma vez e para de ouvir, se eu deixar como true,
+        // ele vai ficar ouvindo ali várias e várias vezes, justamente para fazer esta replicação de maneira mais estruturada
+        continuous: true,
+        // enableAutoPurge: Como lidar com usuário, caso ele perca acesso aquele banco de dados, se o user perder o acesso
+        // o que vai acontecer? Se ele perder o acesso, vamos apagar aquele banco de dados dele
+        enableAutoPurge: true,
+        replicatorType: ReplicatorType.pushAndPull,
+      );
+
+      config.addCollection(
+        collection,
+        CollectionConfiguration(
+          channels: [CouchbaseContants.channel],
+        ),
+      );
+
+      final replicator = await Replicator.createAsync(config);
+
+      replicator.addChangeListener(
+        (change) {
+          if (change.status.error != null) {
+            print(
+                'Ocorreu um erro de sincronização: ${change.status.error.toString()}');
+          }
+          if (change.status.activity == ReplicatorActivityLevel.idle) {
+            print('ocorreu uma sincronização');
+            onSynced();
+          }
+        },
+      );
+      await replicator.start();
+    }
+  }
+
   Future<bool> add({
     required Map<String, dynamic> data,
     required String collectionName,
   }) async {
-    final collection = await database?.createCollection(collectionName);
+    // Configuração banco local: final collection = await database?.createCollection(collectionName);
+    final collection = await database?.createCollection(
+      collectionName,
+      CouchbaseContants.scope,
+    );
 
     if (collection != null) {
       final document = MutableDocument(data);
@@ -26,17 +83,20 @@ class CouchbaseService {
     String? filter,
   }) async {
     await init();
-    await database?.createCollection(collectionName);
+    await database?.createCollection(
+      collectionName,
+      CouchbaseContants.scope,
+    );
 
     final query = await database?.createQuery(
-      'SELECT META().id, * FROM $collectionName ${filter != null ? 'WHERE $filter' : ''}',
+      'SELECT META().id, * FROM ${CouchbaseContants.scope}.$collectionName ${filter != null ? 'WHERE $filter' : ''}', // Antes quando só banco local, era apenas: $collectionName, não tinha: ${CouchbaseContants.scope}.$collectionName
     );
     final result = await query?.execute();
     final results = await result?.allResults();
     final data = results
         ?.map((e) => {
               'id': e.string('id'),
-              ...(e.toPlainMap()['checklist'] as Map<String, dynamic>)
+              ...(e.toPlainMap()[collectionName] as Map<String, dynamic>)
             })
         .toList();
     return data ?? [];
@@ -47,7 +107,10 @@ class CouchbaseService {
     required String id,
     required Map<String, dynamic> data,
   }) async {
-    final collection = await database?.createCollection(collectionName);
+    final collection = await database?.createCollection(
+      collectionName,
+      CouchbaseContants.scope,
+    );
     if (collection != null) {
       final doc = await collection.document(id);
       if (doc != null) {
@@ -68,7 +131,10 @@ class CouchbaseService {
     required String collectionName,
     required String id,
   }) async {
-    final collection = await database?.createCollection(collectionName);
+    final collection = await database?.createCollection(
+      collectionName,
+      CouchbaseContants.scope,
+    );
     if (collection != null) {
       final doc = await collection.document(id);
       if (doc != null) {

@@ -1,12 +1,14 @@
 import 'package:checklist/app/entities/shopping_item_entity.dart';
 import 'package:checklist/app/repositories/checklist_repository.dart';
 import 'package:checklist/app/services/couchbase_service.dart';
+import 'package:checklist/app/utils/couchbase_contants.dart';
 
 class ChecklistApiRepository implements ChecklistRepository {
   final CouchbaseService couchbaseService;
   ChecklistApiRepository({required this.couchbaseService});
 
-  final collectionName = 'checklist';
+  // Este é o banco local: final collectionName = 'checklist';
+  final collectionName = CouchbaseContants.collection;
 
   @override
   Future<List<ShoppingItemEntity>> fetchAll() async {
