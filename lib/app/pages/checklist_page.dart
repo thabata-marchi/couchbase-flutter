@@ -78,12 +78,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
     context.read<FetchChecklistCubit>().fetchItems();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    initApp();
-  }
-
   Future<void> initApp() async {
     await context.read<FetchChecklistCubit>().fetchItems();
     context.read<CouchbaseService>().startReplicator(
@@ -94,6 +88,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 .fetchItems(); // Para carregar os itens atualizados
           },
         );
+    context.read<CouchbaseService>().networkStatusListen();
     // MOCK PARA TESTES
     // void initApp() {
     //   context.read<CouchbaseService>().init().then(
@@ -105,6 +100,19 @@ class _ChecklistPageState extends State<ChecklistPage> {
     //     },
     //   );
     // }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initApp();
+  }
+
+  @override
+  void dispose() {
+    context.read<CouchbaseService>().networkConnection?.cancel();
+    context.read<CouchbaseService>().replicator?.close();
+    super.dispose();
   }
 
   @override
