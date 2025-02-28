@@ -1,9 +1,10 @@
 class CouchbaseContants {
-  static const String userName = 'ChecklistAppUser';
-  static const String password = 'Password@123';
-  static const String channel = 'checklist_items';
-  static const String collection = 'checklist_items';
+  static const String userName = String.fromEnvironment('COUCHBASE_USERNAME');
+  static const String password = String.fromEnvironment('COUCHBASE_PASSWORD');
+  static const String channel = String.fromEnvironment('COUCHBASE_CHANNEL');
+  static const String collection =
+      String.fromEnvironment('COUCHBASE_COLLECTION');
   static const String publicConnectionUrl =
-      'wss://lmqs2nkscomrfob.apps.cloud.couchbase.com/checklist-app-endpoint';
-  static const String scope = 'app_scope';
+      String.fromEnvironment('COUCHBASE_PUBLIC_CONNECT_URL');
+  static const String scope = String.fromEnvironment('COUCHBASE_SCOPE');
 }

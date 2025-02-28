@@ -70,6 +70,44 @@
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = ""
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "COUCHBASE_USERNAME"
+            value = "ChecklistAppUser"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "COUCHBASE_PASSWORD"
+            value = "Password@123"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "COUCHBASE_CHANNEL"
+            value = "checklist_items"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "COUCHBASE_COLLECTION"
+            value = "checklist_items"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "COUCHBASE_PUBLIC_CONNECT_URL"
+            value = "wss://lmqs2nkscomrfob.apps.cloud.couchbase.com/checklist-app-endpoint"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "COUCHBASE_SCOPE"
+            value = "app_scope"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Profile"

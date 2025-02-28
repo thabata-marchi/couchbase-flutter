@@ -41,3 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Arquivo de variáveis de ambiente
+.env
+**/.env
+.env*
