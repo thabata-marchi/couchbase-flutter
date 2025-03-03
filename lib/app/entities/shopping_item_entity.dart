@@ -33,12 +33,14 @@ class ShoppingItemEntity {
     };
   }
 
-  factory ShoppingItemEntity.fromMap(Map<String, dynamic> map) {
+  factory ShoppingItemEntity.fromMap(Map<String, dynamic> data) {
     return ShoppingItemEntity(
-      id: map['id'],
-      title: map['title'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
-      isCompleted: map['isCompleted'],
+      id: data['id'] ?? '',
+      title: data['title'] ?? '',
+      createdAt: data['createdAt'] == null
+          ? DateTime.now()
+          : DateTime.fromMillisecondsSinceEpoch(data['createdAt']),
+      isCompleted: data['isCompleted'] ?? false,
     );
   }
 }
